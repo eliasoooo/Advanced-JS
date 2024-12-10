@@ -1,21 +1,33 @@
 import "./App.css"
+import { useContext } from "react"
 
 import ButtonComp from "./components/ButtonComp"
-// import { useContext } from "react"
-//import { CountContext } from "./context/CountContext"
+
+import { CountContext } from "./context/CountContext"
+import { UserContext } from "./context/userContext"
 import HeaderComp from "./components/HeaderComp"
 
 function App() {
-	//const { count, setCount } = useContext(CountContext)
+	const { count, setCount } = useContext(CountContext)
+	const { user, setUser } = useContext(UserContext)
 
-	const user = null // change this to later to the use context user ❗
+	const handleClick = () => {
+		setCount((prev) => prev + 1)
+	}
 
-	// const handleClick = () => {
-	// 	setCount((prev) => prev + 1)
-	// }
-
-	//const handleLogIn = () => {
-	// }
+	const handleLogIn = () => {
+		setUser(prev => {
+			if (!prev) {
+				return {
+					...prev,
+					email: "john.doe@gmail.com",
+					username: "JohnDoe",
+				}
+			}
+			setCount(0)
+			return null
+		})
+	}
 
 	return (
 		<main
@@ -29,10 +41,11 @@ function App() {
 			}}
 		>
 			<HeaderComp />
-			<ButtonComp text="add" onclick={() => true} />
-			Your result is dynamic count here ...
+			<ButtonComp text="add" onclick={handleClick} />
+			Your result is dynamic count here ... {count}
 			{/* You'll need another button comp here later */}
 			{user && <div className="alert">You are now logged in !!!</div>}
+			<ButtonComp text={user ? "Logout" : "Login"} onclick={handleLogIn} />
 		</main>
 	)
 }
